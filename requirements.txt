@@ -1,0 +1,54 @@
+# SD 1.5 UI requirements
+#
+# torch is NOT listed here on purpose: install.bat installs it first
+# (torch 2.5.1 + torchvision 0.20.1, pinned) from PyTorch's CUDA
+# index so GPU support works (same pattern as the other UIs).
+# Everything below installs from PyPI after that.
+#
+# The diffusers / transformers / gradio pins are a matched set --
+# see the PINNED TRIO note. Do not change one without re-checking
+# the others.
+
+# PINNED TRIO -- change these three together, never one alone.
+# diffusers, transformers and gradio all depend on huggingface-hub,
+# and their hub ranges must overlap, or pip refuses
+# (ResolutionImpossible). This trio was verified end-to-end with
+# pip's resolver for the Kandinsky UI build and is carried over
+# unchanged:
+#   diffusers 0.39.0 needs hub [0.34, 2.0)
+#   transformers 4.57.1 needs hub [0.34, 1.0)
+#   gradio 5.39.0 needs hub [0.33.5, 1.0)
+# All three agree on huggingface-hub 0.36.2. The whole set below
+# was additionally resolved together by pip at SD 1.5 build time
+# (Oct 27, 2026), and every binary wheel was checked to exist
+# for the bundled Python (3.10, win_amd64).
+#
+# The extra pins beyond the other apps:
+#   compel 2.2.0 -- prompt weighting, (word), (word:1.2), [word].
+#     Its SD 1.5 conditioning path was exercised at build time
+#     against a real CLIP tokenizer and text encoder.
+#   opencv-python-headless 4.10.0.84 -- the Canny preprocessor.
+#   scipy 1.14.1 -- required by the LMS sampler
+#     (LMSDiscreteScheduler refuses to load without it).
+#     1.14.x is the last scipy line that runs on Python 3.10.
+#   piexif 1.1.3 -- reads A1111 generation info from PNGs for
+#     the animation tab's prompt_from_png keyframes.
+#   imageio-ffmpeg 0.6.0 -- ships a static ffmpeg binary inside
+#     the wheel, so the Animation tab assembles its movie with
+#     no system ffmpeg install. Verified Oct 27, 2026: the
+#     py3-none-win_amd64 wheel exists (the bundled Python is
+#     3.10) and the pin resolves together with this whole set.
+
+diffusers==0.39.0
+transformers==4.57.1
+gradio==5.39.0
+huggingface_hub==0.36.2
+accelerate==1.15.0
+safetensors==0.8.0
+pillow==11.3.0
+tokenizers==0.22.2
+compel==2.2.0
+opencv-python-headless==4.10.0.84
+scipy==1.14.1
+piexif==1.1.3
+imageio-ffmpeg==0.6.0
