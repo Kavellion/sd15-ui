@@ -4,7 +4,31 @@
 
 SD 1.5 is the most widely known image model there is, and the one with the biggest ecosystem ever built around it — thousands of checkpoints and LoRAs. This app wraps it in the same plain shape as Kandinsky UI, Sana UI and Z-Image UI (run it, a page opens in your browser, type a prompt, pictures appear), then adds the A1111-style core features underneath, plus a few of our own that A1111 never had. Simple on the surface, everything underneath, clean looking.
 
-**Status: code-verified build.** This package has passed its full stub-test suite (UI construction, sampler mapping, prompt-weighting and blending maths, keyframe parsing, end-to-end generate flows against a stub pipeline). It has **not yet had its first picture on a real PC** — that proof comes from a fresh-folder install, and this page will be updated when it lands.
+![Example render — lighthouse](example-lighthouse.jpg)
+
+*Example render — lighthouse*
+
+![Example render — Día de los Muertos altar](example-altar.jpg)
+
+*Example render — Día de los Muertos altar*
+
+![Example render — fox in snow](example-snow-fox.jpg)
+
+*Example render — fox in snow*
+
+![Example render — ice dragon](example-ice-dragon.jpg)
+
+*Example render — ice dragon*
+
+![Example render — round library](example-round-library.jpg)
+
+*Example render — round library*
+
+![Example render — Japanese garden](example-japanese-garden.jpg)
+
+*Example render — Japanese garden*
+
+**Status: proven on a real PC.** Installed from the GitHub release into a fresh folder on Windows (RTX 4070, 12 GB) on Oct 27, 2026 — first picture rendered, then long walk-away batches, including the 300-render run the six example pictures above were picked from (50 steps, DDIM sampler).
 
 ## What it does
 
