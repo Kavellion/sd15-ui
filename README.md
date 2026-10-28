@@ -13,6 +13,7 @@ SD 1.5 is the most widely known image model there is, and the one with the bigge
 - **Checkpoint picker** — the built-in `runwayml/stable-diffusion-v1-5`, or any single-file `.safetensors` / `.ckpt` dropped into the `models/` folder. Refresh button after adding one.
 - **Clip skip** 1 or 2 (A1111 numbering: 1 = regular conditioning, 2 = stop one CLIP layer early).
 - **Two LoRA slots** — `.safetensors` files from the `loras/` folder, each with a weight slider (0–1.5). SD 1.5 LoRAs only; SDXL / SD 3.5 LoRAs do not fit this model.
+- **Embeddings (textual inversion)** — `.pt` / `.safetensors` / `.bin` files from the `embeddings/` folder, ticked in the Embeddings section. Type the file name (without the extension) in the prompt or the negative prompt to use one — the A1111 way. See the Embeddings section below.
 - **CPU offload** checkbox — off by default. SD 1.5 in full float32 is only about 4 GB, so a 12 GB card holds it entirely; offload is there for smaller cards.
 - No token, no license step: the base model is ungated.
 
@@ -34,10 +35,20 @@ SD 1.5 is the most widely known image model there is, and the one with the bigge
 **House features, as in the other apps**
 
 - Batch folders under `images_out/<batch name>/`, reused across runs, frames numbered continuously (`000001.png`, `000002.png`, …).
-- A `settings.txt` block per run logging **everything**: checkpoint, sampler, clip skip, LoRA files and weights, blending / hires / ControlNet state, sizes, steps, CFG, and every seed — so any picture can be reproduced.
+- A `settings.txt` block per run logging **everything**: checkpoint, sampler, clip skip, LoRA files and weights, loaded embeddings (and any that were skipped), blending / hires / ControlNet state, sizes, steps, CFG, and every seed — so any picture can be reproduced.
 - Stop button on every tab, Star batch (copies the last batch into `images_out/favorites/`, never overwrites), Unload models, and a session history (last 10) — picking an entry restores its prompt *and* its settings.
 - Memory is freed between images inside a run, so long queues don't creep upward.
 - The A1111 safety checker is not loaded (A1111 doesn't have one either) — you're responsible for what you generate, same as A1111.
+
+## Embeddings
+
+Textual inversion embeddings — the small trained files from Civitai and elsewhere — work the A1111 way:
+
+1. Drop the file (`.pt`, `.safetensors` or `.bin`, SD 1.5 format) into the `embeddings/` folder and hit **Refresh list** in the Embeddings section at the top of the page.
+2. Tick the embeddings you want loaded. They load with the model and apply to every tab — text-to-image, image-to-image, inpaint and animation.
+3. Type the file's name — without the extension — in the prompt or the negative prompt wherever you want it to act. `(name:1.2)` weighting works on embedding names too.
+
+Multi-vector embeddings expand to all their vectors automatically when you type the name. Embeddings are model-specific: SD 1.5 embeddings do not work in SDXL, and SDXL embeddings do not work here — the vector widths differ. A file that cannot load (corrupt, or another model's) is named in the status line and in settings.txt and skipped; the run carries on without it. One Diffusers rule to know: if an embedding's name is already an ordinary vocabulary word, it refuses to shadow the word — rename the file and it will load.
 
 ## Animation tab
 
@@ -73,6 +84,7 @@ First Generate downloads the base model (~4 GB) into the Hugging Face cache on y
 
 - `models/` — drop single-file checkpoints here (`.safetensors` / `.ckpt`), then hit **Refresh list** in the app.
 - `loras/` — drop SD 1.5 LoRAs here (`.safetensors`), then **Refresh list**.
+- `embeddings/` — drop SD 1.5 textual inversion embeddings here (`.pt` / `.safetensors` / `.bin`), then **Refresh list** and tick them in the Embeddings section.
 - `images_out/` — your batches, one folder per batch name, `settings.txt` beside the frames; `images_out/favorites/` holds starred batches.
 - `random_prompts.txt` — the Random prompt button's list; edit freely.
 
